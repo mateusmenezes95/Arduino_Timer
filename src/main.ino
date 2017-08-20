@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ILI9340.h>
+#include <Chronometer.h>
 
 #if defined(__SAM3X8E__)
     #undef __FlashStringHelper::F(string_literal)
@@ -12,113 +13,69 @@
 #define _mosi 11
 #define _cs 10
 #define _dc 9
-#define _rst 8
-
-enum states {RESET, CONFIG, PLAY, PAUSE};                                    //States of machine
-enum events {PRESS_PLAY_BUTTON, PRESS_PAUSE_BUTTON, PRESS_CONFIG_BUTTON};    //Possible events
-enum occurrences {NO, YES};                                                   //States os occurrences
+#define _rst 8                                                    //States os occurrences
 
 //******************************* Globals Variables *******************************\\
 
 states currentState = RESET;        //Store the actual state of machine
-states nextState = RESET;            //Store the next state of machine
+states nextState = RESET;           //Store the next state of machine
 events event;
 occurrences occurredEvent = NO;     //Store flag of event occurence
 uint8_t minutes = 0;                //Store minutes of timer
 uint8_t seconds = 0;                //Store seconds of timer
 
+float oldTime;
+
 // char serialValue;
 
-
+/* Instace of class */
 Adafruit_ILI9340 tft = Adafruit_ILI9340(_cs, _dc, _rst);
+Chronometer chronometer;
+
 
 void setup(){
   tft.begin();
-  Serial.begin(115200); 
+  Serial.begin(115200);
+
+  pinMode(PLAY_PAUSE_BUTTON_PIN, INPUT_PULLUP);
+  pinMode(RESET_BUTTON_PIN, INPUT_PULLUP);
+  pinMode(PLUS_BUTTON_PIN, INPUT);
+  pinMode(LESS_BUTTON_PIN, INPUT);
+
+  oldTime = millis();
+
 }
 
 void loop(){
-    // if(Serial.available()){
-    //     occurredEvent = YES;
-    //     serialValue = Serial.read();
-    //     switch(serialValue){
-    //         case '1':
-    //             event = PRESS_PLAY_BUTTON;
-    //             Serial.println("Event: PRESS_PLAY_BUTTON");
-    //             break;
-    //         case '2':
-    //             event = PRESS_PAUSE_BUTTON;
-    //             Serial.println("Event: PRESS_PAUSE_BUTTON");
-    //             break;
-    //         case '3':
-    //             event = PRESS_CONFIG_BUTTON;
-    //             Serial.println("Event: PRESS_CONFIG_BUTTON");
-    //             break;
-    //     }
-    // } 
+
+    if((millis() - oldTime) >= POLLING_PERIOD){         //If passed POLLING_PERIOD milliseconds
+        oldTime = millis();                             //Store actual time
+
+        if(!digitalRead(PLAY_PAUSE_BUTTON_PIN)){        //If play_pause_button press
+            switch(currentState){                       //Verifify current state to determine the correct event
+                case PLAY:                   
+                    event = PRESS_PAUSE_BUTTON;
+                    occurredEvent = YES;
+                    break;
+                case RESET:case PAUSE:
+                    event = PRESS_PLAY_BUTTON;
+                    occurredEvent = YES;
+                    break;
+            }
+        }
+        else{
+            if(!digitalRead(RESET_BUTTON_PIN)){
+                event = PRESS_CONFIG_BUTTON;
+                occurredEvent = YES;
+            }
+        }
+    }
+
     if(occurredEvent == YES){
-        stateMachine(event);
-        stateSelect(nextState);
+        chronometer.stateMachine(&event, &currentState, &nextState);
+        chronometer.stateSelect(&nextState);
         currentState = nextState;
         occurredEvent = NO;
-    }
-}
-
-//******************************* State Machine *******************************\\
-
-void stateMachine(events _event){        //Function to change next state of machine 
-    switch(currentState){
-        case RESET:
-            switch(_event){
-                case PRESS_PLAY_BUTTON:
-                    nextState = PLAY;
-                    break;
-                case PRESS_CONFIG_BUTTON:
-                    nextState = CONFIG;
-                    break;
-            }
-        break;
-        case CONFIG:
-            switch(_event){
-                case PRESS_CONFIG_BUTTON:
-                    nextState = RESET;
-                    break;
-            }
-        break;
-        case PLAY:
-            switch(_event){
-                case PRESS_PAUSE_BUTTON:
-                    nextState = PAUSE;
-                    break;
-            }
-        break;
-        case PAUSE:
-            switch(_event){
-                case PRESS_PLAY_BUTTON:
-                    nextState = PLAY;
-                    break;
-                case PRESS_CONFIG_BUTT0N:
-                    nextState = RESET;
-                    break;
-            }
-        break;
-    }
-}
-
-void stateSelect(states state){
-    switch(state){
-        case RESET:
-            // Serial.println("State: RESET");
-            break;
-        case CONFIG:
-            // Serial.println("State: CONFIG");
-            break;
-        case PLAY:
-            // Serial.println("State: PLAY");
-            break;
-        case PAUSE:
-            // Serial.println("State: PAUSE");
-            break;
     }
 }
 
