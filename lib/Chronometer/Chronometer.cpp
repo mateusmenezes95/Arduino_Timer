@@ -1,14 +1,23 @@
 #include "Chronometer.h"
 
 /* Constructor of class */
-Chronometer::Chronometer(void){}
+Chronometer::Chronometer(void)
+{
+    pinMode(PLAY_PAUSE_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(RESET_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(PLUS_BUTTON_PIN, INPUT);
+    pinMode(LESS_BUTTON_PIN, INPUT);
+}
 
 /* Function to change next state of machine */
-void Chronometer::stateMachine(events *_event, states *_currentState, states *_nextState){
-    switch(*_currentState){
+void Chronometer::stateMachine(events *_event, states *_currentState, states *_nextState)
+{
+    switch(*_currentState)
+    {
         case RESET:
             Serial.println("Current state: RESET");
-            switch(*_event){
+            switch(*_event)
+            {
                 case PRESS_PLAY_BUTTON:
                     Serial.println("Event: PRESS_PLAY_BUTTON");
                     *_nextState = PLAY;
@@ -21,7 +30,8 @@ void Chronometer::stateMachine(events *_event, states *_currentState, states *_n
             break;
         case CONFIG:
             Serial.println("Current state: CONFIG");
-            switch(*_event){
+            switch(*_event)
+            {
                 case PRESS_CONFIG_BUTTON:
                     Serial.println("Event: PRESS_CONFIG_BUTTON");
                     *_nextState = RESET;
@@ -30,7 +40,8 @@ void Chronometer::stateMachine(events *_event, states *_currentState, states *_n
             break;
         case PLAY:
             Serial.println("Current state: PLAY");
-            switch(*_event){
+            switch(*_event)
+            {
                 case PRESS_PAUSE_BUTTON:
                     Serial.println("Event: PRESS_PAUSE_BUTTON");
                     *_nextState = PAUSE;
@@ -39,7 +50,8 @@ void Chronometer::stateMachine(events *_event, states *_currentState, states *_n
             break;
         case PAUSE:
             Serial.println("Current state: PAUSE");
-            switch(*_event){
+            switch(*_event)
+            {
                 case PRESS_PLAY_BUTTON:
                     Serial.println("Event: PRESS_PLAY_BUTTON");
                     *_nextState = PLAY;
@@ -54,8 +66,10 @@ void Chronometer::stateMachine(events *_event, states *_currentState, states *_n
 }
 
 /* Function to perform the action of state machine */
-void Chronometer::stateSelect(states *_state){
-    switch(*_state){
+void Chronometer::stateSelect(states *_state)
+{
+    switch(*_state)
+    {
         case RESET:
             Serial.println("State: RESET");
             break;
@@ -72,4 +86,7 @@ void Chronometer::stateSelect(states *_state){
 }
 
 /* Destructor of class */
-Chronometer::~Chronometer(void){}
+Chronometer::~Chronometer(void)
+{
+
+}

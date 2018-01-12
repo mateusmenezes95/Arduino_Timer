@@ -33,17 +33,12 @@ Adafruit_ILI9340 tft = Adafruit_ILI9340(_cs, _dc, _rst);
 Chronometer chronometer;
 
 
-void setup(){
-  tft.begin();
-  Serial.begin(115200);
+void setup()
+{
+    tft.begin();
+    Serial.begin(115200);
 
-  pinMode(PLAY_PAUSE_BUTTON_PIN, INPUT_PULLUP);
-  pinMode(RESET_BUTTON_PIN, INPUT_PULLUP);
-  pinMode(PLUS_BUTTON_PIN, INPUT);
-  pinMode(LESS_BUTTON_PIN, INPUT);
-
-  oldTime = millis();
-
+    oldTime = millis();   
 }
 
 void loop(){
@@ -51,8 +46,10 @@ void loop(){
     if((millis() - oldTime) >= POLLING_PERIOD){         //If passed POLLING_PERIOD milliseconds
         oldTime = millis();                             //Store actual time
 
-        if(!digitalRead(PLAY_PAUSE_BUTTON_PIN)){        //If play_pause_button press
-            switch(currentState){                       //Verifify current state to determine the correct event
+        if(!digitalRead(PLAY_PAUSE_BUTTON_PIN))     //If play_pause_button press
+        {        
+            switch(currentState)                       //Verifify current state to determine the correct event
+            {
                 case PLAY:                   
                     event = PRESS_PAUSE_BUTTON;
                     occurredEvent = YES;
@@ -63,15 +60,18 @@ void loop(){
                     break;
             }
         }
-        else{
-            if(!digitalRead(RESET_BUTTON_PIN)){
+        else
+        {
+            if(!digitalRead(RESET_BUTTON_PIN))
+            {
                 event = PRESS_CONFIG_BUTTON;
                 occurredEvent = YES;
             }
         }
     }
 
-    if(occurredEvent == YES){
+    if(occurredEvent == YES)
+    {
         chronometer.stateMachine(&event, &currentState, &nextState);
         chronometer.stateSelect(&nextState);
         currentState = nextState;
