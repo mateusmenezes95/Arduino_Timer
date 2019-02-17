@@ -2,6 +2,10 @@
 
 /* Constructor of class */
 Chronometer::Chronometer(void)
+    : regular_game_time_minutes_(DEFAULT_REGULAR_GAME_TIME_MINUTES)
+    , regular_game_time_seconds_(DEFAULT_REGULAR_GAME_TIME_SECONDS)
+    , addition_game_time_minutes_(DEFAULT_ADDITION_GAME_MINUTES)
+    , addition_game_time_seconds_(DEFAULT_ADDITION_GAME_SECONDS)
 {
     pinMode(PLAY_PAUSE_BUTTON_PIN, INPUT_PULLUP);
     pinMode(RESET_BUTTON_PIN, INPUT_PULLUP);
@@ -14,6 +18,9 @@ Chronometer::Chronometer(void)
 
     _seconds = 0;
     _minutes = 0;
+
+    time_game_minutes_ = regular_game_time_minutes_ + addition_game_time_minutes_;
+    time_game_seconds_ = regular_game_time_seconds_ + addition_game_time_seconds_;
 }
 
 void Chronometer::begin()
@@ -137,6 +144,18 @@ void Chronometer::incrementTime()
     Serial.println(_seconds);
     Serial.print("Minutes: ");
     Serial.println(_minutes);
+
+    if(_minutes == regular_game_time_minutes_ && _seconds == regular_game_time_seconds_)
+    {
+        Serial.println("Game on addition time");
+    }
+    if(_minutes == time_game_minutes_  && _seconds == time_game_seconds_)
+    {
+        Serial.println("End Game!");
+        this->reset();
+        currentState = RESET;
+    }
+
 
     interruptFlag = false;   
 }

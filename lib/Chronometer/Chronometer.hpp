@@ -3,13 +3,7 @@
 
 #include <Arduino.h>
 #include "TimerOne.h"
- 
-#define PLAY_PAUSE_BUTTON_PIN 2
-#define RESET_BUTTON_PIN 3
-#define PLUS_BUTTON_PIN 4
-#define LESS_BUTTON_PIN 5
-
-#define POLLING_PERIOD 200 //Time in milliseconds
+#include "config.h"
 
 enum states {RESET, CONFIG, PLAY, PAUSE};                                       //States of machine
 enum events {PRESS_PLAY_BUTTON, PRESS_PAUSE_BUTTON, PRESS_CONFIG_BUTTON};       //Possible events
@@ -42,6 +36,12 @@ class Chronometer{
     private:
         uint8_t _seconds;
         uint8_t _minutes;
+        uint8_t time_game_minutes_;
+        uint8_t time_game_seconds_;
+        uint8_t addition_game_time_minutes_;
+        uint8_t addition_game_time_seconds_;
+        uint8_t regular_game_time_minutes_;
+        uint8_t regular_game_time_seconds_;
         TimerOne *_timer;
 };
 
