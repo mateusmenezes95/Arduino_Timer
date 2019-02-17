@@ -58,16 +58,46 @@ void Chronometer::stateMachine()
             {
                 case PRESS_PLAY_BUTTON:
                     Serial.println("Event: PRESS_PLAY_BUTTON");
-                    nextState = PLAY;
+                    nextState = RUNNING;
                     break;
                 case PRESS_CONFIG_BUTTON:
                     Serial.println("Event: PRESS_CONFIG_BUTTON");
-                    nextState = CONFIG;
+                    nextState = REGULAR_TIME_MINUTES_SETTING;
                     break;
             }
             break;
-        case CONFIG:
-            Serial.println("Current state: CONFIG");
+        case REGULAR_TIME_MINUTES_SETTING:
+            Serial.println("Current state: REGULAR_TIME_MINUTES_SETTING");
+            switch(event)
+            {
+                case PRESS_CONFIG_BUTTON:
+                    Serial.println("Event: PRESS_CONFIG_BUTTON");
+                    nextState = REGULAR_TIME_SECONDS_SETTING;
+                    break;
+            }
+            break;
+        case REGULAR_TIME_SECONDS_SETTING:
+            Serial.println("Current state: REGULAR_TIME_SECONDS_SETTING");
+            switch(event)
+            {
+                case PRESS_CONFIG_BUTTON:
+                    Serial.println("Event: PRESS_CONFIG_BUTTON");
+                    nextState = ADDITION_TIME_MINUTES_SETTING;
+                    break;
+            }
+            break;
+        case ADDITION_TIME_MINUTES_SETTING:
+            Serial.println("Current state: ADDITION_TIME_MINUTES_SETTING");
+            switch(event)
+            {
+                case PRESS_CONFIG_BUTTON:
+                    Serial.println("Event: PRESS_CONFIG_BUTTON");
+                    nextState = ADDITION_TIME_SECONDS_SETTING;
+                    break;
+            }
+            break;
+        case ADDITION_TIME_SECONDS_SETTING:
+            Serial.println("Current state: ADDITION_TIME_SECONDS_SETTING");
             switch(event)
             {
                 case PRESS_CONFIG_BUTTON:
@@ -76,23 +106,23 @@ void Chronometer::stateMachine()
                     break;
             }
             break;
-        case PLAY:
-            Serial.println("Current state: PLAY");
+        case RUNNING:
+            Serial.println("Current state: RUNNING");
             switch(event)
             {
                 case PRESS_PAUSE_BUTTON:
                     Serial.println("Event: PRESS_PAUSE_BUTTON");
-                    nextState = PAUSE;
+                    nextState = STOPPED;
                     break;
             }
             break;
-        case PAUSE:
-            Serial.println("Current state: PAUSE");
+        case STOPPED:
+            Serial.println("Current state: STOPPED");
             switch(event)
             {
                 case PRESS_PLAY_BUTTON:
                     Serial.println("Event: PRESS_PLAY_BUTTON");
-                    nextState = PLAY;
+                    nextState = RUNNING;
                     break;
                 case PRESS_CONFIG_BUTTON:
                     Serial.println("Event: PRESS_CONFIG_BUTTON");
@@ -112,15 +142,24 @@ void Chronometer::stateSelect()
             Serial.println("State: RESET");
             reset();
             break;
-        case CONFIG:
-            Serial.println("State: CONFIG");
+        case REGULAR_TIME_MINUTES_SETTING:
+            Serial.println("State: REGULAR_TIME_MINUTES_SETTING");
             break;
-        case PLAY:
-            Serial.println("State: PLAY");
+        case REGULAR_TIME_SECONDS_SETTING:
+            Serial.println("State: REGULAR_TIME_SECONDS_SETTING");
+            break;
+        case ADDITION_TIME_MINUTES_SETTING:
+            Serial.println("State: ADDITION_TIME_MINUTES_SETTING");
+            break;
+        case ADDITION_TIME_SECONDS_SETTING:
+            Serial.println("State: ADDITION_TIME_SECONDS_SETTING");
+            break;
+        case RUNNING:
+            Serial.println("State: RUNNING");
             play();
             break;
-        case PAUSE:
-            Serial.println("State: PAUSE");
+        case STOPPED:
+            Serial.println("State: STOPPED");
             pause();
             break;
     }    

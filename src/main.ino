@@ -13,7 +13,7 @@
 #define _mosi 11
 #define _cs 10
 #define _dc 9
-#define _rst 8                                                    //States os occurrences
+#define _rst 8
 
 float oldTime;
 
@@ -29,7 +29,6 @@ void setup()
     chronometer.begin();
     Serial.begin(115200);
 
-
     oldTime = millis();   
 }
 
@@ -38,16 +37,16 @@ void loop()
 
     if((millis() - oldTime) >= POLLING_PERIOD)         //If passed POLLING_PERIOD milliseconds
     {
-        oldTime = millis();                             //Store actual time
+        oldTime = millis();                             //Sto/re actual time
 
         if(!digitalRead(PLAY_PAUSE_BUTTON_PIN))     //If play_pause_button press
         {        
             switch(chronometer.currentState)                       //Verifify current state to determine the correct event
             {
-                case PLAY:                   
+                case RUNNING:                   
                     chronometer.event = PRESS_PAUSE_BUTTON;
                     break;
-                case RESET:case PAUSE:
+                case RESET:case STOPPED:
                     chronometer.event = PRESS_PLAY_BUTTON;
                     break;
             }
@@ -74,11 +73,3 @@ void loop()
         chronometer.incrementTime();
     }
 }
-
-
-  
-
-  
-
-
-
