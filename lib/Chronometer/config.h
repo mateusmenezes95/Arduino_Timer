@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 #define PLAY_PAUSE_BUTTON_PIN 2
-#define RESET_BUTTON_PIN 3
+#define SETTING_BUTTON_PIN 3
 #define PLUS_BUTTON_PIN 4
 #define LESS_BUTTON_PIN 5
 

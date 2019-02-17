@@ -8,7 +8,7 @@ Chronometer::Chronometer(void)
     , addition_game_time_seconds_(DEFAULT_ADDITION_GAME_SECONDS)
 {
     pinMode(PLAY_PAUSE_BUTTON_PIN, INPUT_PULLUP);
-    pinMode(RESET_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(SETTING_BUTTON_PIN, INPUT_PULLUP);
     pinMode(PLUS_BUTTON_PIN, INPUT);
     pinMode(LESS_BUTTON_PIN, INPUT);
 
@@ -60,8 +60,8 @@ void Chronometer::stateMachine()
                     Serial.println("Event: PRESS_PLAY_BUTTON");
                     nextState = RUNNING;
                     break;
-                case PRESS_CONFIG_BUTTON:
-                    Serial.println("Event: PRESS_CONFIG_BUTTON");
+                case PRESS_SETTING_BUTTON:
+                    Serial.println("Event: PRESS_SETTING_BUTTON");
                     nextState = REGULAR_TIME_MINUTES_SETTING;
                     break;
             }
@@ -70,8 +70,8 @@ void Chronometer::stateMachine()
             Serial.println("Current state: REGULAR_TIME_MINUTES_SETTING");
             switch(event)
             {
-                case PRESS_CONFIG_BUTTON:
-                    Serial.println("Event: PRESS_CONFIG_BUTTON");
+                case PRESS_SETTING_BUTTON:
+                    Serial.println("Event: PRESS_SETTING_BUTTON");
                     nextState = REGULAR_TIME_SECONDS_SETTING;
                     break;
             }
@@ -80,8 +80,8 @@ void Chronometer::stateMachine()
             Serial.println("Current state: REGULAR_TIME_SECONDS_SETTING");
             switch(event)
             {
-                case PRESS_CONFIG_BUTTON:
-                    Serial.println("Event: PRESS_CONFIG_BUTTON");
+                case PRESS_SETTING_BUTTON:
+                    Serial.println("Event: PRESS_SETTING_BUTTON");
                     nextState = ADDITION_TIME_MINUTES_SETTING;
                     break;
             }
@@ -90,8 +90,8 @@ void Chronometer::stateMachine()
             Serial.println("Current state: ADDITION_TIME_MINUTES_SETTING");
             switch(event)
             {
-                case PRESS_CONFIG_BUTTON:
-                    Serial.println("Event: PRESS_CONFIG_BUTTON");
+                case PRESS_SETTING_BUTTON:
+                    Serial.println("Event: PRESS_SETTING_BUTTON");
                     nextState = ADDITION_TIME_SECONDS_SETTING;
                     break;
             }
@@ -100,8 +100,8 @@ void Chronometer::stateMachine()
             Serial.println("Current state: ADDITION_TIME_SECONDS_SETTING");
             switch(event)
             {
-                case PRESS_CONFIG_BUTTON:
-                    Serial.println("Event: PRESS_CONFIG_BUTTON");
+                case PRESS_SETTING_BUTTON:
+                    Serial.println("Event: PRESS_SETTING_BUTTON");
                     nextState = RESET;
                     break;
             }
@@ -124,8 +124,8 @@ void Chronometer::stateMachine()
                     Serial.println("Event: PRESS_PLAY_BUTTON");
                     nextState = RUNNING;
                     break;
-                case PRESS_CONFIG_BUTTON:
-                    Serial.println("Event: PRESS_CONFIG_BUTTON");
+                case PRESS_SETTING_BUTTON:
+                    Serial.println("Event: PRESS_SETTING_BUTTON");
                     nextState = RESET;
                     break;
             }

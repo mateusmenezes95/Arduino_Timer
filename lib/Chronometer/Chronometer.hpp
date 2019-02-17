@@ -9,7 +9,7 @@
 enum events {
     PRESS_PLAY_BUTTON, 
     PRESS_PAUSE_BUTTON, 
-    PRESS_CONFIG_BUTTON
+    PRESS_SETTING_BUTTON
 };
 
 enum occurrences {

@@ -52,13 +52,10 @@ void loop()
             }
             chronometer.occurredEvent = YES;
         }
-        else
+        if(!digitalRead(SETTING_BUTTON_PIN))
         {
-            if(!digitalRead(RESET_BUTTON_PIN))
-            {
-                chronometer.event = PRESS_CONFIG_BUTTON;
-                chronometer.occurredEvent = YES;
-            }
+            chronometer.event = PRESS_SETTING_BUTTON;
+            chronometer.occurredEvent = YES;
         }
     }
 
